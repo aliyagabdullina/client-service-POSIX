@@ -16,13 +16,13 @@ int main() {
     int fd = shm_open(SHM_NAME, O_RDWR, S_IRWXU | S_IRWXG);
     if (fd == -1) {
         perror("shm_open");
-        return 1;
+        exit(-1);
     }
   
     void *ptr = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (ptr == MAP_FAILED) {
         perror("mmap");
-        return 1;
+        exit(-1);
     }
 
     // генерируем случайные числа и записываем их в разделяемую память
@@ -36,12 +36,12 @@ int main() {
     // отсоединяем разделяемую память
     if (munmap(ptr, SHM_SIZE) == -1) {
         perror("munmap");
-        return 1;
+        exit(-1);
     }
   
     if (close(fd) == -1) {
         perror("close");
-        return 1;
+        exit(-1);
     }
 
     return 0;
